@@ -1,6 +1,6 @@
 {
     "appSecret": "le_chat_scrat",
     "pageAccessToken": "le_chat_scrat",
-    "validationToken": "le_chat_scrat",
+    "validationToken": "EAALvBleJgs4BAKpM0yyseq2AtaV6ZCBcrk9FaZCYPLfNblIASZAAzP2Xjwfar8tvNt97sIxBzCyJTfi97BNXYtKcyV3SbwZCsaCeHzRSd3yRETGbd4nc5npMpyc7xA6WQNHNAfH9UGfzuuxwxAJcrXtnl0ulLZABIWFQORsv1HwZDZD",
     "serverURL": "https://scrat-le-chat.herokuapp.com/"
 }
