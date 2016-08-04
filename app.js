@@ -82,7 +82,6 @@ app.get('/webhook', function(req, res) {
  */
 app.post('/webhook', function (req, res) {
   var data = req.body;
-  console.log(data);
 
   // Make sure this is a page subscription
   if (data.object == 'page') {
@@ -232,7 +231,7 @@ function receivedMessage(event) {
   var metadata = message.metadata;
 
   // You may get a text or attachment but not both
-  var messageText = message.text;
+  var messageText = 'Miaou';
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
