@@ -233,9 +233,9 @@ function receivedMessage(event) {
   // You may get a text or attachment but not both
   for(var i=0;i<message.text.split(' ').length;i++){
     if(i%2){
-      messageText += 'Miaou ';
-    }else{
       messageText += 'Mew ';
+    }else{
+      messageText += 'Miaou ';
     }
 
   }
