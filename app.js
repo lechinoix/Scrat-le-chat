@@ -10,7 +10,7 @@
 /* jshint node: true, devel: true */
 'use strict';
 
-var 
+var
   bodyParser = require('body-parser'),
   config = require('config'),
   crypto = require('crypto'),
@@ -19,7 +19,6 @@ var
   request = require('request');
 
 var app = express();
-app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
@@ -31,7 +30,7 @@ app.use(express.static('public'));
  */
 
 // App Secret can be retrieved from the App Dashboard
-var APP_SECRET = (process.env.MESSENGER_APP_SECRET) ? 
+var APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
   process.env.MESSENGER_APP_SECRET :
   config.get('appSecret');
 
