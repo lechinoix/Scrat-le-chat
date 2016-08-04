@@ -229,9 +229,16 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
-
+  var messageText = '';
   // You may get a text or attachment but not both
-  var messageText = 'Miaou';
+  for(var i=0;i<message.text.split(' ').length;i++){
+    if(i%2){
+      messageText += 'Miaou ';
+    }else{
+      messageText += 'Mew ';
+    }
+
+  }
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
