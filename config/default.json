@@ -1,6 +1,6 @@
 {
-    "appSecret": "825760470893262",
-    "pageAccessToken": "EAALvBleJgs4BAKpM0yyseq2AtaV6ZCBcrk9FaZCYPLfNblIASZAAzP2Xjwfar8tvNt97sIxBzCyJTfi97BNXYtKcyV3SbwZCsaCeHzRSd3yRETGbd4nc5npMpyc7xA6WQNHNAfH9UGfzuuxwxAJcrXtnl0ulLZABIWFQORsv1HwZDZD",
-    "validationToken": "EAALvBleJgs4BAKpM0yyseq2AtaV6ZCBcrk9FaZCYPLfNblIASZAAzP2Xjwfar8tvNt97sIxBzCyJTfi97BNXYtKcyV3SbwZCsaCeHzRSd3yRETGbd4nc5npMpyc7xA6WQNHNAfH9UGfzuuxwxAJcrXtnl0ulLZABIWFQORsv1HwZDZD",
+    "appSecret": "3703476397c955baba103f5a92445c09",
+    "pageAccessToken": "EAALvBleJgs4BACIeEbz68Sl0vRmaEVD9HiIIZAMT8mEZCWatIVlvBFDluqq17Av4MlIilGXVdOFYpF79wOIo80ctCy4KWakVu1RdoLcLdM8JvCOzNWZAoHjdWzY9ZCQQKr3F8HcQVVuTnyHV0exGnj7ZCjZCcuMAoZA2oYQrwPcAwZDZD",
+    "validationToken": "scrat_le_chat",
     "serverURL": "https://scrat-le-chat.herokuapp.com/"
 }
