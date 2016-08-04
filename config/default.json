@@ -1,5 +1,5 @@
 {
-    "appSecret": "appSecret",
+    "appSecret": "le_chat_scrat",
     "pageAccessToken": "le_chat_scrat",
     "validationToken": "le_chat_scrat",
     "serverURL": "https://scrat-le-chat.herokuapp.com/"

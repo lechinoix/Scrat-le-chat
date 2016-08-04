@@ -10,7 +10,7 @@
 /* jshint node: true, devel: true */
 'use strict';
 
-var
+const
   bodyParser = require('body-parser'),
   config = require('config'),
   crypto = require('crypto'),
@@ -18,7 +18,7 @@ var
   https = require('https'),
   request = require('request');
 
-var app = express();
+const app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
@@ -31,23 +31,23 @@ app.use(express.static('public'));
  */
 
 // App Secret can be retrieved from the App Dashboard
-var APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
+const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
   process.env.MESSENGER_APP_SECRET :
   config.get('appSecret');
 
 // Arbitrary value used to validate a webhook
-var VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
+const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
   (process.env.MESSENGER_VALIDATION_TOKEN) :
   config.get('validationToken');
 
 // Generate a page access token for your page from the App Dashboard
-var PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
+const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
   (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
   config.get('pageAccessToken');
 
 // URL where the app is running (include protocol). Used to point to scripts and
 // assets located at this address.
-var SERVER_URL = (process.env.SERVER_URL) ?
+const SERVER_URL = (process.env.SERVER_URL) ?
   (process.env.SERVER_URL) :
   config.get('serverURL');
 
