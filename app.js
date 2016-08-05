@@ -231,13 +231,17 @@ function receivedMessage(event) {
   var metadata = message.metadata;
   var messageText = '';
   // You may get a text or attachment but not both
-  for(var i=0;i<message.text.split(' ').length;i++){
-    if(i%2){
-      messageText += 'Mew ';
-    }else{
-      messageText += 'Miaou ';
-    }
 
+  if(message.text.includes('Scrat')){
+    messageText += 'C\'est moi !';
+  }else{
+    for(var i=0;i<message.text.split(' ').length;i++){
+      if(i%2){
+        messageText += 'Mew ';
+      }else{
+        messageText += 'Miaou ';
+      }
+    }
   }
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
