@@ -16,7 +16,9 @@ var
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
-  request = require('request');
+  request = require('request'),
+  moment = require('moment'),
+  _ = require('lodash');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -201,6 +203,10 @@ function receivedAuthentication(event) {
   sendTextMessage(senderID, "Authentication successful");
 }
 
+function pickList(list){
+  return (list).shuffle().first();
+}
+
 /*
  * Message Event
  *
@@ -230,9 +236,37 @@ function receivedMessage(event) {
   var appId = message.app_id;
   var metadata = message.metadata;
   var messageText = '';
+  var sentMessage = message.text.toLowerCase();
+  var kefa = [
+    'mange des croquettes de ouf',
+    'peaufine mon bronzage',
+    'bois un mojito',
+    'suis en soirée c\'est la folie',
+    'mate Game of Thrones c\'est trop',
+    'pionce sur le balcon',
+    'sui tro def',
+    'suis aux States déso poto',
+    'suis le point de pécho la chatte d\'en face'
+  ];
+  var whatTime = [
+    'de l\'apéro',
+    'de ma sieste',
+    'qu\'il est',
+    'qu\'il était hier à la même heure',
+    'de faire du sport',
+    'de boire un grand verre de jus de pomme',
+    'de se faire les griffes sur le tapis',
+    'de jouer à la coinche',
+    'de faire du tamtam place de la République',
+    'que je préfère',
+  ];
   // You may get a text or attachment but not both
 
-  if(message.text.includes('Scrat')){
+  if(sentMessage.includes('kefa') || sentMessage.includes('tu fais quoi')){
+    messageText += 'Je ' + pickList(kefa) +' Miaou !' ;
+  }else if(sentMessage.includes('heure') && sentMessage.includes('?')){
+    messageText += 'Il est ' + moment.locale('FR').format('LT') + ' c\'est l\'heure ' + pickList(whatTime) + ' Miaou !';
+  }else if(sentMessage.includes('scrat')){
     messageText += 'C\'est moi !';
   }else{
     for(var i=0;i<message.text.split(' ').length;i++){
@@ -243,6 +277,7 @@ function receivedMessage(event) {
       }
     }
   }
+  
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
