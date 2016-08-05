@@ -204,7 +204,7 @@ function receivedAuthentication(event) {
 }
 
 function pickList(list){
-  return (list).shuffle().first();
+  return _(list).shuffle().first().value();
 }
 
 /*
@@ -236,7 +236,7 @@ function receivedMessage(event) {
   var appId = message.app_id;
   var metadata = message.metadata;
   var messageText = '';
-  var sentMessage = message.text.toLowerCase();
+  var receivedMessage = message.text.toLowerCase();
   var kefa = [
     'mange des croquettes de ouf',
     'peaufine mon bronzage',
@@ -258,18 +258,18 @@ function receivedMessage(event) {
     'de se faire les griffes sur le tapis',
     'de jouer à la coinche',
     'de faire du tamtam place de la République',
-    'que je préfère',
+    'que je préfère'
   ];
   // You may get a text or attachment but not both
 
-  if(sentMessage.includes('kefa') || sentMessage.includes('tu fais quoi')){
-    messageText += 'Je ' + pickList(kefa) +' Miaou !' ;
-  }else if(sentMessage.includes('heure') && sentMessage.includes('?')){
+  if(receivedMessage.includes('kefa') || receivedMessage.includes('tu fais quoi')){
+    messageText += 'Je ' + pickList(kefa) +' Miaou !';
+  }else if(receivedMessage.includes('heure') && receivedMessage.includes('?')){
     messageText += 'Il est ' + moment.locale('FR').format('LT') + ' c\'est l\'heure ' + pickList(whatTime) + ' Miaou !';
-  }else if(sentMessage.includes('scrat')){
+  }else if(receivedMessage.includes('scrat')){
     messageText += 'C\'est moi !';
   }else{
-    for(var i=0;i<message.text.split(' ').length;i++){
+    for(var i=0;i<receivedMessage.split(' ').length;i++){
       if(i%2){
         messageText += 'Mew ';
       }else{
@@ -277,7 +277,7 @@ function receivedMessage(event) {
       }
     }
   }
-  
+
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
