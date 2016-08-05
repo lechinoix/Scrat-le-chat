@@ -21,6 +21,7 @@ var
   _ = require('lodash');
 
 var app = express();
+
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
@@ -222,6 +223,7 @@ function pickList(list){
  *
  */
 function receivedMessage(event) {
+  moment.locale('FR');
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -265,7 +267,7 @@ function receivedMessage(event) {
   if(receivedMessage.indexOf('kefa') != -1 || receivedMessage.indexOf('tu fais quoi') != -1){
     messageText += 'Je ' + pickList(kefa) +' Miaou !';
   }else if(receivedMessage.indexOf('heure') != -1 && receivedMessage.indexOf('?') != -1){
-    messageText += 'Il est ' + moment.locale('FR').format('LT') + ' c\'est l\'heure ' + pickList(whatTime) + ' Miaou !';
+    messageText += 'Il est ' + moment().format('LT') + ' c\'est l\'heure ' + pickList(whatTime) + ' Miaou !';
   }else if(receivedMessage.indexOf('scrat') != -1){
     messageText += 'C\'est moi !';
   }else{
