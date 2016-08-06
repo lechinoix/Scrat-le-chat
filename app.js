@@ -20,6 +20,8 @@ var
   moment = require('moment'),
   _ = require('lodash');
 
+require('moment-timezone');
+
 var app = express();
 
 app.set('port', process.env.PORT || 5000);
@@ -204,41 +206,22 @@ function receivedAuthentication(event) {
   sendTextMessage(senderID, "Authentication successful");
 }
 
-function pickList(list){
+function pickOne(list){
   return _(list).shuffle().first();
 }
 
-/*
- * Message Event
- *
- * This event is called when a message is sent to your page. The 'message'
- * object format can vary depending on the kind of message that was received.
- * Read more at https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-received
- *
- * For this example, we're going to echo any text that we get. If we get some
- * special keywords ('button', 'generic', 'receipt'), then we'll send back
- * examples of those bubbles to illustrate the special message bubbles we've
- * created. If we receive a message with an attachment (image, video, audio),
- * then we'll simply confirm that we've received the attachment.
- *
- */
-function receivedMessage(event) {
+function stupidAnswer(message){
+  var stupidSounds = [
+    'Miaou',
+    'Mew',
+    'Miaouu',
+    'Rrrrr'
+  ];
+  return _(message).words().map(function(word){return pickOne(stupidSounds);}).join(' ');
+}
+
+function theBrain(message){
   moment.locale('FR');
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
-
-  console.log("Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
-
-  var isEcho = message.is_echo;
-  var messageId = message.mid;
-  var appId = message.app_id;
-  var metadata = message.metadata;
-  var messageText = '';
-  var receivedMessage = message.text.toLowerCase().toString();
   var kefa = [
     'mange des croquettes de ouf',
     'peaufine mon bronzage',
@@ -262,23 +245,60 @@ function receivedMessage(event) {
     'de faire du tamtam place de la République',
     'que je préfère'
   ];
-  // You may get a text or attachment but not both
 
-  if(receivedMessage.indexOf('kefa') != -1 || receivedMessage.indexOf('tu fais quoi') != -1){
-    messageText += 'Je ' + pickList(kefa) +' Miaou !';
-  }else if(receivedMessage.indexOf('heure') != -1 && receivedMessage.indexOf('?') != -1){
-    messageText += 'Il est ' + moment().format('LT') + ' c\'est l\'heure ' + pickList(whatTime) + ' Miaou !';
-  }else if(receivedMessage.indexOf('scrat') != -1){
-    messageText += 'C\'est moi !';
-  }else{
-    for(var i=0;i<receivedMessage.split(' ').length;i++){
-      if(i%2){
-        messageText += 'Mew ';
-      }else{
-        messageText += 'Miaou ';
-      }
+  var understandings = [
+    {
+      expression: /(kefa|tu fais quoi)/,
+      answer: 'Je ' + pickOne(kefa) +' Miaou !'
+    },
+    {
+      expression: /heure.*\?/,
+      answer: 'Il est ' + moment().tz('Europe/Paris').format('LT') + ' c\'est l\'heure ' + pickOne(whatTime) + ' Miaou !'
+    },
+    {
+      expression: /scrat/,
+      answer: 'C\'est moi !'
     }
-  }
+  ];
+
+  var heGotIt = _(understandings).find(function(understanding){
+    return understanding.expression.test(message);
+  });
+
+  return heGotIt ? heGotIt.answer : stupidAnswer(message);
+}
+
+/*
+ * Message Event
+ *
+ * This event is called when a message is sent to your page. The 'message'
+ * object format can vary depending on the kind of message that was received.
+ * Read more at https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-received
+ *
+ * For this example, we're going to echo any text that we get. If we get some
+ * special keywords ('button', 'generic', 'receipt'), then we'll send back
+ * examples of those bubbles to illustrate the special message bubbles we've
+ * created. If we receive a message with an attachment (image, video, audio),
+ * then we'll simply confirm that we've received the attachment.
+ *
+ */
+function receivedMessage(event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfMessage = event.timestamp;
+  var message = event.message;
+
+  console.log("Received message for user %d and page %d at %d with message:",
+    senderID, recipientID, timeOfMessage);
+  console.log(JSON.stringify(message));
+
+  var isEcho = message.is_echo;
+  var messageId = message.mid;
+  var appId = message.app_id;
+  var metadata = message.metadata;
+  var messageText = message.text.toLowerCase();
+
+  var answer = theBrain(messageText);
 
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
@@ -297,12 +317,12 @@ function receivedMessage(event) {
     return;
   }
 
-  if (messageText) {
+  if (answer) {
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    switch (messageText) {
+    switch (answer) {
       case 'image':
         sendImageMessage(senderID);
         break;
@@ -356,7 +376,8 @@ function receivedMessage(event) {
         break;
 
       default:
-        sendTextMessage(senderID, messageText);
+        console.log(answer);
+        sendTextMessage(senderID, answer);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
