@@ -265,6 +265,13 @@ function recognizeAnswer(){
   return [me];
 }
 
+function theBody(orders){
+  return _.reduce(orders, function(actions, order){
+    actions.push('read receipt', 'typing on', order);
+    return actions;
+  }, []);
+}
+
 function theBrain(message){
   var understandings = [
     {
@@ -281,11 +288,12 @@ function theBrain(message){
     }
   ];
 
-  var heGotIt = _(understandings).find(function(understanding){
+  var iGotIt = _(understandings).find(function(understanding){
     return understanding.expression.test(message);
   });
+  var whatToAnswer = iGotIt ? iGotIt.answers : stupidAnswer(message);
 
-  return heGotIt ? heGotIt.answers : stupidAnswer(message);
+  return theBody(whatToAnswer);
 }
 
 /*
@@ -339,64 +347,66 @@ function receivedMessage(event) {
 
   if (answers) {
 
-    answers.forEach(function(answer){
-      switch (answer) {
-        case 'image':
+    _(answers).forEach(function(answer, index){
+      setTimeout(function(){
+        switch (answer) {
+          case 'image':
           sendImageMessage(senderID);
           break;
 
-        case 'gif':
+          case 'gif':
           sendGifMessage(senderID);
           break;
 
-        case 'audio':
+          case 'audio':
           sendAudioMessage(senderID);
           break;
 
-        case 'video':
+          case 'video':
           sendVideoMessage(senderID);
           break;
 
-        case 'file':
+          case 'file':
           sendFileMessage(senderID);
           break;
 
-        case 'button':
+          case 'button':
           sendButtonMessage(senderID);
           break;
 
-        case 'generic':
+          case 'generic':
           sendGenericMessage(senderID);
           break;
 
-        case 'receipt':
+          case 'receipt':
           sendReceiptMessage(senderID);
           break;
 
-        case 'quick reply':
+          case 'quick reply':
           sendQuickReply(senderID);
           break;
 
-        case 'read receipt':
+          case 'read receipt':
           sendReadReceipt(senderID);
           break;
 
-        case 'typing on':
+          case 'typing on':
           sendTypingOn(senderID);
           break;
 
-        case 'typing off':
+          case 'typing off':
           sendTypingOff(senderID);
           break;
 
-        case 'account linking':
+          case 'account linking':
           sendAccountLinking(senderID);
           break;
 
-        default:
+          default:
           console.log(answer);
           sendTextMessage(senderID, answer);
-      }
+        }
+      }, 1000 * index);
     });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
