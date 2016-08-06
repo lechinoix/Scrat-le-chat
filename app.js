@@ -213,8 +213,11 @@ function pickOne(list){
 function stupidAnswer(message){
   var stupidSounds = [
     'Miaou',
-    'Mew',
     'Miaouu',
+    'Miaouuu',
+    'Mew',
+    'Meww',
+    'Mewww',
     'Rrrrr'
   ];
   return _(message).words().map(function(word){return pickOne(stupidSounds);}).join(' ');
@@ -231,7 +234,7 @@ function theBrain(message){
     'pionce sur le balcon',
     'sui tro def',
     'suis aux States déso poto',
-    'suis le point de pécho la chatte d\'en face'
+    'squanch'
   ];
   var whatTime = [
     'de l\'apéro',
