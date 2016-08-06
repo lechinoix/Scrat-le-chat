@@ -324,7 +324,7 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
-  var messageText = message.text.toLowerCase();
+  var messageText = message.text ? message.text.toLowerCase() : undefined;
 
   var answers = theBrain(messageText);
 
