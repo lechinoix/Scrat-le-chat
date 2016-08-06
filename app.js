@@ -220,11 +220,13 @@ function stupidAnswer(message){
     'Mewww',
     'Rrrrr'
   ];
-  return _(message).words().map(function(word){return pickOne(stupidSounds);}).join(' ');
+  return [_(message)
+          .words()
+          .map(function(word){return pickOne(stupidSounds);})
+          .join(' ')];
 }
 
-function theBrain(message){
-  moment.locale('FR');
+function kefaAnswer(){
   var kefa = [
     'mange des croquettes de ouf',
     'peaufine mon bronzage',
@@ -236,6 +238,11 @@ function theBrain(message){
     'suis aux States déso poto',
     'squanch'
   ];
+  return ['Je ' + pickOne(kefa) +' Miaou !'];
+}
+
+function timeAnswer(){
+  moment.locale('FR');
   var whatTime = [
     'de l\'apéro',
     'de ma sieste',
@@ -248,19 +255,29 @@ function theBrain(message){
     'de faire du tamtam place de la République',
     'que je préfère'
   ];
+  return ['Il est ' + moment().tz('Europe/Paris').format('LT') + ' c\'est l\'heure ' + pickOne(whatTime) + ' Miaou !'];
+}
 
+function recognizeAnswer(){
+  var me = [
+    'C\'est moi !'
+  ];
+  return [me];
+}
+
+function theBrain(message){
   var understandings = [
     {
       expression: /(kefa|tu fais quoi)/,
-      answer: 'Je ' + pickOne(kefa) +' Miaou !'
+      answers: kefaAnswer()
     },
     {
       expression: /heure.*\?/,
-      answer: 'Il est ' + moment().tz('Europe/Paris').format('LT') + ' c\'est l\'heure ' + pickOne(whatTime) + ' Miaou !'
+      answers: timeAnswer()
     },
     {
       expression: /scrat/,
-      answer: 'C\'est moi !'
+      answers: recognizeAnswer()
     }
   ];
 
@@ -268,7 +285,7 @@ function theBrain(message){
     return understanding.expression.test(message);
   });
 
-  return heGotIt ? heGotIt.answer : stupidAnswer(message);
+  return heGotIt ? heGotIt.answers : stupidAnswer(message);
 }
 
 /*
@@ -301,7 +318,7 @@ function receivedMessage(event) {
   var metadata = message.metadata;
   var messageText = message.text.toLowerCase();
 
-  var answer = theBrain(messageText);
+  var answers = theBrain(messageText);
 
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
@@ -320,68 +337,67 @@ function receivedMessage(event) {
     return;
   }
 
-  if (answer) {
+  if (answers) {
 
-    // If we receive a text message, check to see if it matches any special
-    // keywords and send back the corresponding example. Otherwise, just echo
-    // the text we received.
-    switch (answer) {
-      case 'image':
-        sendImageMessage(senderID);
-        break;
+    answers.forEach(function(answer){
+      switch (answer) {
+        case 'image':
+          sendImageMessage(senderID);
+          break;
 
-      case 'gif':
-        sendGifMessage(senderID);
-        break;
+        case 'gif':
+          sendGifMessage(senderID);
+          break;
 
-      case 'audio':
-        sendAudioMessage(senderID);
-        break;
+        case 'audio':
+          sendAudioMessage(senderID);
+          break;
 
-      case 'video':
-        sendVideoMessage(senderID);
-        break;
+        case 'video':
+          sendVideoMessage(senderID);
+          break;
 
-      case 'file':
-        sendFileMessage(senderID);
-        break;
+        case 'file':
+          sendFileMessage(senderID);
+          break;
 
-      case 'button':
-        sendButtonMessage(senderID);
-        break;
+        case 'button':
+          sendButtonMessage(senderID);
+          break;
 
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
+        case 'generic':
+          sendGenericMessage(senderID);
+          break;
 
-      case 'receipt':
-        sendReceiptMessage(senderID);
-        break;
+        case 'receipt':
+          sendReceiptMessage(senderID);
+          break;
 
-      case 'quick reply':
-        sendQuickReply(senderID);
-        break;
+        case 'quick reply':
+          sendQuickReply(senderID);
+          break;
 
-      case 'read receipt':
-        sendReadReceipt(senderID);
-        break;
+        case 'read receipt':
+          sendReadReceipt(senderID);
+          break;
 
-      case 'typing on':
-        sendTypingOn(senderID);
-        break;
+        case 'typing on':
+          sendTypingOn(senderID);
+          break;
 
-      case 'typing off':
-        sendTypingOff(senderID);
-        break;
+        case 'typing off':
+          sendTypingOff(senderID);
+          break;
 
-      case 'account linking':
-        sendAccountLinking(senderID);
-        break;
+        case 'account linking':
+          sendAccountLinking(senderID);
+          break;
 
-      default:
-        console.log(answer);
-        sendTextMessage(senderID, answer);
-    }
+        default:
+          console.log(answer);
+          sendTextMessage(senderID, answer);
+      }
+    });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
