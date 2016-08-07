@@ -349,8 +349,9 @@ function receivedMessage(event) {
   }
 
   if (answers) {
-
+    var timeOut = 0;
     _(answers).forEach(function(answer, index){
+      timeOut += 1000 * answer.actionTime;
       setTimeout(function(){
         switch (answer.action) {
           case 'image':
@@ -409,7 +410,7 @@ function receivedMessage(event) {
           console.log(answer.action);
           sendTextMessage(senderID, answer.action);
         }
-      }, 1000 * index * answer.actionTime);
+      }, timeOut + 1000 * answer.actionTime);
     });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
