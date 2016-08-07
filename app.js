@@ -269,7 +269,7 @@ function theBody(orders, message){
   return _.reduce(orders, function(actions, order){
     actions.push(
       {action: 'typing on', actionTime: _.words(order).length/2},
-      {action: order, actionTime: 10}
+      {action: order, actionTime: 1}
     );
     return actions;
   }, [{action: 'read receipt', actionTime: 1 + _.words(message).length/2}]);
