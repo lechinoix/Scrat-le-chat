@@ -265,11 +265,14 @@ function recognizeAnswer(){
   return [me];
 }
 
-function theBody(orders){
+function theBody(orders, message){
   return _.reduce(orders, function(actions, order){
-    actions.push('read receipt', 'typing on', order);
+    actions.push(
+      {action: 'typing on', actionTime: _.words(order).length/2},
+      {action: order, actionTime: 10}
+    );
     return actions;
-  }, []);
+  }, [{action: 'read receipt', actionTime: 1 + _.words(message).length/2}]);
 }
 
 function theBrain(message){
@@ -293,7 +296,7 @@ function theBrain(message){
   });
   var whatToAnswer = iGotIt ? iGotIt.answers : stupidAnswer(message);
 
-  return theBody(whatToAnswer);
+  return theBody(whatToAnswer, message);
 }
 
 /*
@@ -349,7 +352,7 @@ function receivedMessage(event) {
 
     _(answers).forEach(function(answer, index){
       setTimeout(function(){
-        switch (answer) {
+        switch (answer.action) {
           case 'image':
           sendImageMessage(senderID);
           break;
@@ -403,10 +406,10 @@ function receivedMessage(event) {
           break;
 
           default:
-          console.log(answer);
-          sendTextMessage(senderID, answer);
+          console.log(answer.action);
+          sendTextMessage(senderID, answer.action);
         }
-      }, 1000 * index);
+      }, 1000 * index * answer.actionTime);
     });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
